@@ -30,42 +30,39 @@ jobs:
 
       - name: connect to server
         run: |
-          ssh root@${{secrets.HOST_IP}}
-            echo "Seccessfully connected to server"
+          ssh root@${{secrets.HOST_IP}} '
+            echo "--- Starting remote commands ---"
 
-            # 1. Verify current working directory
-            echo "Current working directory:"
+            # 1. Verify current working directory ON THE SERVER
+            echo "Remote current working directory:"
             pwd
 
             # 2. Re-check permissions and ownership of the file FROM THE REMOTE SHELL
-            echo "Permissions for /root/test-pipeline.txt:"
+            echo "Permissions for /root/test-pipeline.txt (from remote shell):"
             ls -l /root/test-pipeline.txt
 
             # 3. Check permissions of the parent directory FROM THE REMOTE SHELL
-            echo "Permissions for /root/:"
+            echo "Permissions for /root/ (from remote shell):"
             ls -ld /root/
 
-            # 4. Try to read the file using an alternative method (if cat is truly blocked)
-            echo "Attempting to read file with less:"
+            # 4. Try to read the file using an alternative method
+            echo "Attempting to read file with less (from remote shell):"
             less /root/test-pipeline.txt || echo "less failed"
 
-            echo "Attempting to read file with head:"
+            echo "Attempting to read file with head (from remote shell):"
             head -n 1 /root/test-pipeline.txt || echo "head failed"
 
             # 5. Try creating a *new* file in /root
-            echo "Attempting to create a new file in /root:"
+            echo "Attempting to create a new file in /root (from remote shell):"
             echo "Hello from pipeline" > /root/pipeline_new_file.txt && echo "New file created successfully" || echo "New file creation failed"
 
             # 6. List all files in /root (including hidden ones)
-            echo "Contents of /root/:"
+            echo "Contents of /root/ (from remote shell):"
             ls -la /root/
 
             # 7. Finally, try to cat the original file again
-            echo "Attempting to cat original file /root/test-pipeline.txt:"
+            echo "Attempting to cat original file /root/test-pipeline.txt (from remote shell):"
             cat /root/test-pipeline.txt
 
             echo "--- Remote commands finished ---"
-          '
-
-
-            cat /root/test-pipeline.txt
+          ' 
