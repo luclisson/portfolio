@@ -65,4 +65,4 @@ jobs:
             cat /root/test-pipeline.txt
 
             echo "--- Remote commands finished ---"
-          ' 
+          ' # <-- for future me those single quotes are really important because everything inside is send to the remote server
