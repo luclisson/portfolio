@@ -32,4 +32,40 @@ jobs:
         run: |
           ssh root@${{secrets.HOST_IP}}
             echo "Seccessfully connected to server"
+
+            # 1. Verify current working directory
+            echo "Current working directory:"
+            pwd
+
+            # 2. Re-check permissions and ownership of the file FROM THE REMOTE SHELL
+            echo "Permissions for /root/test-pipeline.txt:"
+            ls -l /root/test-pipeline.txt
+
+            # 3. Check permissions of the parent directory FROM THE REMOTE SHELL
+            echo "Permissions for /root/:"
+            ls -ld /root/
+
+            # 4. Try to read the file using an alternative method (if cat is truly blocked)
+            echo "Attempting to read file with less:"
+            less /root/test-pipeline.txt || echo "less failed"
+
+            echo "Attempting to read file with head:"
+            head -n 1 /root/test-pipeline.txt || echo "head failed"
+
+            # 5. Try creating a *new* file in /root
+            echo "Attempting to create a new file in /root:"
+            echo "Hello from pipeline" > /root/pipeline_new_file.txt && echo "New file created successfully" || echo "New file creation failed"
+
+            # 6. List all files in /root (including hidden ones)
+            echo "Contents of /root/:"
+            ls -la /root/
+
+            # 7. Finally, try to cat the original file again
+            echo "Attempting to cat original file /root/test-pipeline.txt:"
+            cat /root/test-pipeline.txt
+
+            echo "--- Remote commands finished ---"
+          '
+
+
             cat /root/test-pipeline.txt
