@@ -33,3 +33,4 @@ jobs:
         run: |
           ssh root@${{secrets.HOST_IP}}
             echo "Seccessfully connected to server"
+            cat test-pipeline.txt
