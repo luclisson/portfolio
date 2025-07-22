@@ -1,0 +1,35 @@
+name: Remote Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Npm Install
+        run : npm i
+      
+      - name: Set up SSH Agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{secrets.SSH_PRIVATE_KEY}}
+
+
+      - name: configure ssh connection
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{secret.HOST_IP}} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+        
+
+
+      - name: connect to server
+        run: |
+          ssh root@${{secret.HOST_IP}}
+            echo "Seccessfully connected to server"
