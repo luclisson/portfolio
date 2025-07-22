@@ -31,5 +31,5 @@ jobs:
 
       - name: connect to server
         run: |
-          ssh root@${{secret.HOST_IP}}
+          ssh root@${{secrets.HOST_IP}}
             echo "Seccessfully connected to server"
